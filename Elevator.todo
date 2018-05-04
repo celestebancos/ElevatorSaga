@@ -1,0 +1,11 @@
+	☐ new logic: set up and down indicator and use to track elevator intent
+tryFloor:
+	☐ change directions at 12 and 0
+	☐	if the elevator button is pressed, go to the floor
+	☐	if the elevator has capacity to load
+		 ☐	if the up button is pressed and the elevator is going up, go to the floor
+		 ☐	if the down button is pressed and the elevator is going down, go to the floor
+	☐	otherwise, try the next floor
+Buttons Array:
+	☐ for each floor, store a set of values: {elevator: true, up: true, down: false}
+	☐	check syntax
