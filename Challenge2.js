@@ -4,27 +4,37 @@
 		var floorsWanted = [];
 		for (var index = 0; index < floors.length; index++){
 			floorsWanted.push(false);
-		};
+		}
+
+		//adds button event handlers to each floor object
+		floors.forEach(function(element){
+			addButtonEvents(element);
+		});
+
+		function addButtonEvents(floor){
+			floor.on("up_button_pressed down_button_pressed", function(){
+				floorsWanted[floor.floorNum()] = true;
+			});
+		}
 
 		// Whenever the elevator is idle (has no more queued destinations) ...
 		elevator.on("idle", function() {
 			for (var i = 1; i<= 4; i++){
-				// console.log("Floor " + i + "pressed = " + isButtonPressed(elevator, i));
-				if (isButtonPressed(elevator, i)){
+				if (isFloorWanted(elevator, i)){
 					go(elevator, i);
 				}
 			}
 			elevator.goToFloor(0);
 		});
 
-		//checks if an elevator button is pressed
-		function isButtonPressed(elevator, floor){
-			if (elevator.getPressedFloors().includes(floor)){
+		//checks if an elevator or floor button is pressed
+		function isFloorWanted(elevator, floor){
+			if (elevator.getPressedFloors().includes(floor) || floorsWanted[floor]){
 				return true;
 			} else {
 				return false;
 			}
-		};
+		}
 
 		//goes to a floor and turns off the wanted status
 		function go(elevator, floor){
