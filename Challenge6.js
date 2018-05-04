@@ -23,12 +23,18 @@
 
 		function idle(elevator){
 			elevator.on("idle", function(){
-				for (var i = 1; i<= floors.length; i++){
+				//goes from floor 1 to floor n
+				for (var i = 1; i< floors.length; i++){
 					if (isFloorWanted(elevator, i)){
 						go(elevator, i);
 					}
 				}
-				elevator.goToFloor(0);
+				//goes from floor n-1 to floor 0
+				for (var j = floors.length-2; j>= 0; j--){
+					if (isFloorWanted(elevator, j)){
+						go(elevator, j);
+					}
+				}
 			});
 		}
 
@@ -45,7 +51,6 @@
 		function go(elevator, floor){
 			elevator.goToFloor(floor);
 			floorsWanted[floor] = false;
-			console.log(floorsWanted);
 		}
 	},
 	update: function(dt, elevators, floors) {
