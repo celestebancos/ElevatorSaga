@@ -1,11 +1,41 @@
-	☐ new logic: set up and down indicator and use to track elevator intent
-tryFloor:
-	☐ change directions at 12 and 0
-	☐	if the elevator button is pressed, go to the floor
-	☐	if the elevator has capacity to load
-		 ☐	if the up button is pressed and the elevator is going up, go to the floor
-		 ☐	if the down button is pressed and the elevator is going down, go to the floor
-	☐	otherwise, try the next floor
-Buttons Array:
-	☐ for each floor, store a set of values: {elevator: true, up: true, down: false}
-	☐	check syntax
+Position Object:
+	✔	I could make a position object that contains a floor number and a direction @done (18-05-06 16:32)
+	☐	Update elevator indicators to match new position
+
+tryFloors:
+	☐	incorporate position logic
+	☐	check if the elevator is loaded
+	☐	check if the elevator is wanted for up or for down
+	☐	do nothing if the position is current
+
+Loading:
+	☐	Make a function to check if the elevator is fully loaded or not
+
+indicateUp:
+	☐	get the timing right on the indicators so people get on
+
+Floor Object Properties:
+	☐	Try adding properties to the floor objects
+	floor.up = false;
+	floor.down = false;
+	☐	Test to see if it works - can it replace the button array?
+
+Problems:
+	☐	the elevator gets full but keeps trying to pick people up
+	☐	the elevator gets stuck when the floor it is on has people who want to get on, but it is full.
+	☐	the elevator doesn't use the down status light even when it gets to the top floor
+
+I think I have to add a pinnacle.  I need to know if I'm done going up, not just done looking at ups and downs.  If I'm at the highest wanted floor, I should switch to down.  If I'm at the lowest wanted floor, I should switch to up.
+Maybe adding the up and down logic would help, so I don't stop at floors on the way up when people want to go down.
+
+＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+Archive:
+	✔	I can make a function called "nextFloorNum" that returns the proper floor num given the current (or any) floor @done (18-05-06 16:21) @project(tryFloor)
+	✔ for each floor, store a set of values: {elevator: true, up: true, down: false} @done (18-05-04 17:49) @project(tryFloor)
+	✔ Open Questions: @done (18-05-04 17:49)
+	✔ Buttons Array: @done (18-05-04 17:49)
+	✔	if the elevator button is pressed, go to the floor @done (18-05-04 17:49) @project(tryFloor)
+	✔	have the events change them and the elevator change them @done (18-05-04 17:49) @project(tryFloor)
+	✔	check syntax @done (18-05-04 17:49) @project(tryFloor)
+	✔	What should the idle event be? @done (18-05-04 17:49) @project(tryFloor)
+	✔ new logic: set up and down indicator and use to track elevator intent @done (18-05-04 12:23)
