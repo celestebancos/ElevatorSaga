@@ -1,7 +1,7 @@
 {
 	init: function(elevators, floors) {
 		var topFloor = floors[floors.length - 1].floorNum();
-
+		console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 		//initialize buttons array
 		var buttons = [];
 		floors.forEach(function(){
