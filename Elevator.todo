@@ -1,12 +1,13 @@
-Position Object:
+Do next:
 	✔	I could make a position object that contains a floor number and a direction @done (18-05-06 16:32)
+	✔	incorporate position logic into tryFloors @done (18-05-06 18:24)
+	✔	Make tryFloor do nothing if the position matches the current position @done (18-05-06 18:24)
 	☐	Update elevator indicators to match new position
+		☐	change the go function so it takes a position instead of a floor
 
-tryFloors:
-	☐	incorporate position logic
+tryFloor:
 	☐	check if the elevator is loaded
 	☐	check if the elevator is wanted for up or for down
-	☐	do nothing if the position is current
 
 Loading:
 	☐	Make a function to check if the elevator is fully loaded or not
@@ -16,11 +17,13 @@ indicateUp:
 
 Floor Object Properties:
 	☐	Try adding properties to the floor objects
-	floor.up = false;
-	floor.down = false;
-	☐	Test to see if it works - can it replace the button array?
+		floor.up = false;
+		floor.down = false;
+		☐	Test to see if it works - can it replace the button array?
+	☐	Then upgrade tryFloor to have the easy wanted logic
 
 Problems:
+	☐	the elevator gets stuck on the top floor because it doesn't turn off its up status light
 	☐	the elevator gets full but keeps trying to pick people up
 	☐	the elevator gets stuck when the floor it is on has people who want to get on, but it is full.
 	☐	the elevator doesn't use the down status light even when it gets to the top floor

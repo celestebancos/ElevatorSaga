@@ -36,28 +36,41 @@
 				console.log("I have nothing to do.");
 				var currentPosition = getPosition(elevator);
 				console.log(`I am on floor ${currentPosition.floor} going ${currentPosition.direction}`);
-				go(elevator, currentPosition.next().floor);
+				tryFloor(elevator, currentPosition.nextPosition());
+				//go(elevator, currentPosition.next().floor);
 			});
 		}
 
 		//go to a floor if it is wanted
-		// function tryFloor(elevator, floor){
-		// 	if (isFloorWanted(elevator, floor) || floor === 0){ 			//go to the selected floor if it is wanted
-		// 		go(elevator, floor);
-		// 	} else {
-		// 		console.log("Trying floor " + nextFloor(floor));
-		// 		tryFloor(nextFloor(floor));
-		// 	}
-		// }
+		function tryFloor(elevator, position){
+			var floor = position.floor;
+			console.log(`Trying floor ${floor}`);
+			if (isCurrentPosition(elevator, position)){
+				return; //stops the function to avoid an infinite loop
+			} else if (isFloorWanted(elevator, floor) || floor === 0){ 			//go to the selected floor if it is wanted
+				go(elevator, floor);
+			} else {
+				tryFloor(elevator, position.nextPosition());
+			}
+		}
 
-		// function nextFloor(floor, direction){
-		// 	if (floor === 0 || direction == "up"  && floor < topFloor){	 		//try the next floor up if at the bottom of going up
-		// 		return floor + 1;
-		// 	} 
-		// 	else if (floor == topFloor || direction == "down" && floor > 0){		//try the next floor down if at the top or going down
-		// 		return floor - 1;
-		// 	}
-		// }		
+		//check if an elevator or floor button is pressed
+		function isFloorWanted(elevator, floor){
+			if (elevator.getPressedFloors().includes(floor) || buttons[floor].up || buttons[floor].down){
+				return true;
+			} else {
+				return false;
+			}
+		}	
+
+		function isCurrentPosition(elevator, position){
+			var elevatorPosition = getPosition(elevator);
+			if (position.floor == elevatorPosition.floor && position.direction == elevatorPosition.direction){
+				return true;
+			} else {
+				return false;
+			}
+		}
 
 		//return the current position of the elevator
 		function getPosition(elevator){
@@ -76,36 +89,31 @@
 		function Position(floor, direction){
 			this.floor = floor;
 			this.direction = direction;
-			this.next = function() {
-				var nextFloor;
-				var nextDirection;
-				if (floor === 0 || direction == "up"  && floor < topFloor){	 		//try the next floor up if at the bottom of going up
-					nextFloor = floor + 1;
-					if (nextFloor == topFloor){
-						nextDirection = "down";
-					} else {
-						nextDirection = "up";
-					}
-				} 
-				else if (floor == topFloor || direction == "down" && floor > 0){		//try the next floor down if at the top or going down
-					nextFloor = floor - 1;
-					if (nextFloor === 0){
-						nextDirection = "up";
-					} else {
-						nextDirection = "down";
-					}					
-				}
-				return new Position (nextFloor, nextDirection);
-			};
-		}
 
-		//check if an elevator or floor button is pressed
-		function isFloorWanted(elevator, floor){
-			if (elevator.getPressedFloors().includes(floor) || buttons[floor].up || buttons[floor].down){
-				return true;
-			} else {
-				return false;
-			}
+			this.nextFloor = function(){
+				// if (floor === 0 || direction == "up"  && floor < topFloor){	 			//next floor up if at the bottom or going up
+				if (this.direction == "up"){
+					return this.floor + 1;
+				}
+				//else if (floor == topFloor || direction == "down" && floor > 0){		//next floor down if at the top or going down
+				else if (this.direction == "down"){
+					return this.floor - 1;
+				}
+			};
+
+			this.nextDirection = function(){
+				if (this.nextFloor() === 0){
+					return "up";
+				} else if (this.nextFloor() == topFloor){
+					return "down";
+				} else {
+					return this.direction;
+				}
+			};
+
+			this.nextPosition = function() {
+				return new Position (this.nextFloor(), this.nextDirection());
+			};
 		}
 
 		//go to a floor and turns off the wanted status
