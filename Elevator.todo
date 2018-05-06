@@ -1,9 +1,9 @@
+Behavior Problems:
+	☐	the elevator stops on an up trip at a floor where the people want to go down
+	☐	the elevator gets full but keeps trying to pick people up
+	☐	the elevator gets stuck when the floor it is on has people who want to get on, but it is full.
+
 Do next:
-	✔	I could make a position object that contains a floor number and a direction @done (18-05-06 16:32)
-	✔	incorporate position logic into tryFloors @done (18-05-06 18:24)
-	✔	Make tryFloor do nothing if the position matches the current position @done (18-05-06 18:24)
-	☐	Update elevator indicators to match new position
-		☐	change the go function so it takes a position instead of a floor
 
 tryFloor:
 	☐	check if the elevator is loaded
@@ -12,8 +12,6 @@ tryFloor:
 Loading:
 	☐	Make a function to check if the elevator is fully loaded or not
 
-indicateUp:
-	☐	get the timing right on the indicators so people get on
 
 Floor Object Properties:
 	☐	Try adding properties to the floor objects
@@ -22,17 +20,21 @@ Floor Object Properties:
 		☐	Test to see if it works - can it replace the button array?
 	☐	Then upgrade tryFloor to have the easy wanted logic
 
-Problems:
-	☐	the elevator gets stuck on the top floor because it doesn't turn off its up status light
-	☐	the elevator gets full but keeps trying to pick people up
-	☐	the elevator gets stuck when the floor it is on has people who want to get on, but it is full.
-	☐	the elevator doesn't use the down status light even when it gets to the top floor
 
 I think I have to add a pinnacle.  I need to know if I'm done going up, not just done looking at ups and downs.  If I'm at the highest wanted floor, I should switch to down.  If I'm at the lowest wanted floor, I should switch to up.
 Maybe adding the up and down logic would help, so I don't stop at floors on the way up when people want to go down.
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+	✔ indicateUp: @done (18-05-06 19:08)
+	✔	get the timing right on the indicators so people get on @done (18-05-06 19:08) @project(Loading)
+	✔	change the go function so it takes a position instead of a floor @done (18-05-06 19:08) @project(Do next)
+	✔	Update elevator indicators to match new position @done (18-05-06 19:08) @project(Do next)
+	✔	the elevator gets stuck on the top floor because it doesn't turn off its up status light @done (18-05-06 19:07) @project(Behavior Problems)
+	✔	the elevator doesn't use the down status light even when it gets to the top floor @done (18-05-06 19:07) @project(Behavior Problems)
+	✔	incorporate position logic into tryFloors @done (18-05-06 18:24) @project(Do next)
+	✔	Make tryFloor do nothing if the position matches the current position @done (18-05-06 18:24) @project(Do next)
+	✔	I could make a position object that contains a floor number and a direction @done (18-05-06 16:32) @project(Do next)
 	✔	I can make a function called "nextFloorNum" that returns the proper floor num given the current (or any) floor @done (18-05-06 16:21) @project(tryFloor)
 	✔ for each floor, store a set of values: {elevator: true, up: true, down: false} @done (18-05-04 17:49) @project(tryFloor)
 	✔ Open Questions: @done (18-05-04 17:49)

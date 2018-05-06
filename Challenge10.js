@@ -1,6 +1,7 @@
 {
 	init: function(elevators, floors) {
 		var topFloor = floors[floors.length - 1].floorNum();
+		//put some space between the new log and the old stuff
 		console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 		//initialize buttons array
 		var buttons = [];
@@ -44,11 +45,10 @@
 		//go to a floor if it is wanted
 		function tryFloor(elevator, position){
 			var floor = position.floor;
-			console.log(`Trying floor ${floor}`);
 			if (isCurrentPosition(elevator, position)){
 				return; //stops the function to avoid an infinite loop
 			} else if (isFloorWanted(elevator, floor) || floor === 0){ 			//go to the selected floor if it is wanted
-				go(elevator, floor);
+				go(elevator, position);
 			} else {
 				tryFloor(elevator, position.nextPosition());
 			}
@@ -117,13 +117,16 @@
 		}
 
 		//go to a floor and turns off the wanted status
-		function go(elevator, floor){
-			console.log("I'm going to floor " + floor);
+		function go(elevator, position){
+			var floor = position.floor;
+			var direction = position.direction;
+			console.log(`I'm going to floor ${floor}`);
 			elevator.goToFloor(floor);
-			if (elevator.goingUpIndicator()){
+			if (direction == "up"){
+				indicateUp(elevator);
 				buttons[floor].up = false;
-			}
-			if (elevator.goingDownIndicator()){
+			} else {
+				indicateDown(elevator);
 				buttons[floor].down = false;
 			}
 			floorsWanted[floor] = false;
