@@ -4,26 +4,9 @@ Behavior Problems:
 	☐	the elevator gets stuck when the floor it is on has people who want to get on, but it is full.
 
 Do next:
-
-tryFloor:
-	☐	check if the elevator is loaded
-	☐	check if the elevator is wanted for up or for down
-
-Loading:
+	✔	have tryFloor check if the elevator is wanted for up or for down @done (18-05-06 20:33)
 	☐	Make a function to check if the elevator is fully loaded or not
-
-
-Floor Object Properties:
-	☐	Try adding properties to the floor objects
-		floor.up = false;
-		floor.down = false;
-		☐	Test to see if it works - can it replace the button array?
-	☐	Then upgrade tryFloor to have the easy wanted logic
-
-
-I think I have to add a pinnacle.  I need to know if I'm done going up, not just done looking at ups and downs.  If I'm at the highest wanted floor, I should switch to down.  If I'm at the lowest wanted floor, I should switch to up.
-Maybe adding the up and down logic would help, so I don't stop at floors on the way up when people want to go down.
-
+	☐	have tryFloor check if the elevator is loaded
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
 	✔ indicateUp: @done (18-05-06 19:08)

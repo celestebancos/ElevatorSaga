@@ -18,6 +18,7 @@
 		//add button event handlers to each floor object
 		floors.forEach(function(floor){
 			addButtonEvents(floor);
+			console.log(floor.up);
 		});
 		function addButtonEvents(floor){
 			floor.on("up_button_pressed", function(){
@@ -47,7 +48,7 @@
 			var floor = position.floor;
 			if (isCurrentPosition(elevator, position)){
 				return; //stops the function to avoid an infinite loop
-			} else if (isFloorWanted(elevator, floor) || floor === 0){ 			//go to the selected floor if it is wanted
+			} else if (isRequested(elevator, position)){ 			//go to the selected floor if it is wanted
 				go(elevator, position);
 			} else {
 				tryFloor(elevator, position.nextPosition());
@@ -55,8 +56,14 @@
 		}
 
 		//check if an elevator or floor button is pressed
-		function isFloorWanted(elevator, floor){
-			if (elevator.getPressedFloors().includes(floor) || buttons[floor].up || buttons[floor].down){
+		function isRequested(elevator, position){
+			var floor = position.floor;
+			var direction = position.direction;
+			if (elevator.getPressedFloors().includes(floor)){
+				return true;
+			} else if (direction == "up" && buttons[floor].up){
+				return true;
+			} else if (direction == "down" && buttons[floor].down){
 				return true;
 			} else {
 				return false;
