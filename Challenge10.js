@@ -1,6 +1,8 @@
 {
 	init: function(elevators, floors) {
 		var topFloor = floors[floors.length - 1].floorNum();
+		var loadThreshold = 0.65;
+		var chatty = false;
 		//put some space between the new log and the old stuff
 		console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 		//initialize buttons array
@@ -18,7 +20,6 @@
 		//add button event handlers to each floor object
 		floors.forEach(function(floor){
 			addButtonEvents(floor);
-			console.log(floor.up);
 		});
 		function addButtonEvents(floor){
 			floor.on("up_button_pressed", function(){
@@ -32,12 +33,13 @@
 		// initialize elevators with idle event
 		elevators.forEach(function(elevator){
 			addIdleEvent(elevator);
+            say(`I can hold ${elevator.maxPassengerCount()} people.`);
 		});
 		function addIdleEvent(elevator){
 			elevator.on("idle", function(){
-				console.log("I have nothing to do.");
+				say("I have nothing to do.");
 				var currentPosition = getPosition(elevator);
-				console.log(`I am on floor ${currentPosition.floor} going ${currentPosition.direction}`);
+				say(`I am on floor ${currentPosition.floor} going ${currentPosition.direction}`);
 				tryFloor(elevator, currentPosition.nextPosition());
 				//go(elevator, currentPosition.next().floor);
 			});
@@ -61,6 +63,8 @@
 			var direction = position.direction;
 			if (elevator.getPressedFloors().includes(floor)){
 				return true;
+			} else if (isFull(elevator)){
+				return false;
 			} else if (direction == "up" && buttons[floor].up){
 				return true;
 			} else if (direction == "down" && buttons[floor].down){
@@ -77,19 +81,6 @@
 			} else {
 				return false;
 			}
-		}
-
-		//return the current position of the elevator
-		function getPosition(elevator){
-			var floor = elevator.currentFloor();
-			var direction;
-			if (elevator.goingUpIndicator()){
-				direction = "up";
-			} else {
-				direction = "down";
-			}
-			var position = new Position(floor, direction);
-			return position;
 		}
 
 		//create a position object
@@ -127,7 +118,8 @@
 		function go(elevator, position){
 			var floor = position.floor;
 			var direction = position.direction;
-			console.log(`I'm going to floor ${floor}`);
+			say(`I am ${Math.round(elevator.loadFactor()*100)}% full.`);
+			say(`I'm going to floor ${floor}`);
 			elevator.goToFloor(floor);
 			if (direction == "up"){
 				indicateUp(elevator);
@@ -139,21 +131,45 @@
 			floorsWanted[floor] = false;
 		}
 
+		//check if an elevator is full
+		function isFull(elevator){
+			if (elevator.loadFactor() > loadThreshold){
+				say("I'm too full.");
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		//return the current position of the elevator
+		function getPosition(elevator){
+			var floor = elevator.currentFloor();
+			var direction;
+			if (elevator.goingUpIndicator()){
+				direction = "up";
+			} else {
+				direction = "down";
+			}
+			var position = new Position(floor, direction);
+			return position;
+		}
+
 		//change indicators
 		function indicateUp(elevator){
 			elevator.goingUpIndicator(true);
 			elevator.goingDownIndicator(false);
-			console.log("Let's go up.");
+			say("Let's go up.");
 		}
 		function indicateDown(elevator){
 			elevator.goingUpIndicator(false);
 			elevator.goingDownIndicator(true);
-			console.log("Let's go down.");
+			say("Let's go down.");
 		} 
-		function indicateBoth(elevator){
-			elevator.goingUpIndicator(true);
-			elevator.goingDownIndicator(true);
-			console.log("I could go up or down.");
+
+		function say(text){
+			if (chatty){
+				console.log(text);
+			}
 		}
 	},
 	update: function(dt, elevators, floors) {
