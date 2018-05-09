@@ -1,5 +1,7 @@
 {
 	init: function(elevators, floors) {
+		//This version works through challenge 12
+
 		var topFloor = floors[floors.length - 1].floorNum();
 		var loadThreshold = 0.65;
 		var chatty = false;
