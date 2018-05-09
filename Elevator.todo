@@ -1,11 +1,59 @@
 Behavior Problems:
-	☐	the elevator gets full but keeps trying to pick people up
-	☐	the elevator gets stuck when the floor it is on has people who want to get on, but it is full.
+	☐	the wait time is too long for challenge 13
+		☐	empty elevators get stuck when going up - they only move when a person gets in, not when a person wants to go up or down from a floor
+		☐	does this happen every time? Does it ever happen to an elevator going down?
+		☐	it doesn't seem to happen every time.
+		☐	it happens at the beginning; the elevators wait for people to get in before they move
+		☐	maybe elevators get stuck when they somehow have a destination but don't go to it? So they're never idling?
+		☐	maybe most of the elevators should only go up as far as their passengers want, and then they go back down, picking people up along the way...
+	☐	I have no way for elevators to communicate with each other or work together.
+	☐	I have no way to differentiate between elevators and designate certain ones to behave in a certain way
 
 Do next:
-	☐	get rid of the floorsWanted array
+
+
+	☐	add elevator number
+	☐	put in comments to try to diagnose the stuck elevator problem
+	☐	test this: I could try having the elevator switch to the down position if it tries everything and comes back empty. It won't fix everything but it will at least make it easier to load. Maybe it can just turn on the down light and be at both, in case it's on the bottom floor.
+Future:
+	☐	I could make a separate place to keep track of the floors that elevators are going to - and when they get to a floor, they can clear it from both that list and from the buttons list.
+	☐	test if each person pushes the button or just the first person
+	☐	Maybe I want to take the sequencing logic out of the position object, so that I can have multiple different versions (maybe some elevators try going down first, etc.)
+	☐	maybe every elevator can just have a floor and a heading...
+		☐	a stopped elevator has a current floor and a "destination" heading.
+		☐	a moving elevator has an origin floor, a destination floor and a current heading.  But it might also have a "destination" heading if it intends to change direction when it reaches the destination floor.
+	☐	give each elevator it's own load threshold based on capacity
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+	✔	make a wrapper for the elevator object that stores an elevator number and calls the elevator functions @done (18-05-09 13:58) @project(Do next)
+	✔	So the elevators idle, but then they stop. They don't keep doing the idle thing. @done (18-05-09 13:58) @project(Do next)
+	✔	I can make chatty an elevator attribute, so I can track only one elevator and hope it gets stuck... @done (18-05-09 13:58) @project(Do next)
+	✔ Problem: the idle function gets passed into the elevator object, which doesn't have access to the controller methods. @done (18-05-09 13:45) @project(Do next)
+	✔	So only the first elevator said stuff at the beginning, but when I told them all to go up, they all talked.  But they're not supposed to be chatty!  How did they come to be chatty? @done (18-05-09 13:45) @project(Do next)
+	✔	Looks like it worked! :D @done (18-05-09 13:45) @project(Do next)
+	✔	I could try passing the whole controller in - is that recursive? Would it break something? @done (18-05-09 13:45) @project(Do next)
+	✔	Hah, I had a global say function :P @done (18-05-09 13:45) @project(Do next)
+	✔	okay, so I have a floorsWanted array but it doesn't even do anything right now. I think I could just take it out completely. @done (18-05-09 12:08) @project(Do next)
+	✔	get rid of the floorsWanted array @done (18-05-09 12:07) @project(Do next)
+	✔	the elevator waits for a person to get in instead of going to get more people @done (18-05-08 19:08) @project(Behavior Problems)
+	✔	the elevator gets full but keeps trying to pick people up @done (18-05-08 19:07) @project(Behavior Problems)
+	✔	the elevator gets stuck when the floor it is on has people who want to get on, but it is full. @done (18-05-06 22:56) @project(Behavior Problems)
 	✔	the elevator stops on an up trip at a floor where the people want to go down @done (18-05-06 21:14) @project(Behavior Problems)
 	✔	have tryFloor check if the elevator is loaded @done (18-05-06 21:14) @project(Do next)
 	✔	Make a function to check if the elevator is fully loaded or not @done (18-05-06 21:14) @project(Do next)
