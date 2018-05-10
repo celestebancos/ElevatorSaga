@@ -145,20 +145,12 @@
 
 			this.request = function(position){
 				if(this.elevator.destinationQueue.length === 0){
-					// this.tryFloor(position);
 					this.say(`Responding to request from floor ${position.floor}.`);
 					var currentPosition = this.getPosition();
-					//this.say(`I am on floor ${currentPosition.floor} going ${currentPosition.direction}`);
 					this.tryFloor(currentPosition.nextPosition());
 				}
 			};
 		}
-
-		// function say(text){   //done
-		// 	if (chatty){
-		// 		console.log(text);
-		// 	}
-		// }
 
 		//------------ 	POSITIONS -------------
 
@@ -169,6 +161,8 @@
 
 			this.nextFloor = function(){
 				// if (floor === 0 || direction == "up"  && floor < topFloor){	 			//next floor up if at the bottom or going up
+
+				//Assumes a valid starting position
 				if (this.direction == "up"){
 					return this.floor + 1;
 				}
@@ -199,18 +193,20 @@
 		floors.forEach(function(floor){
 			addButtonEvents(floor);
 		});
+
 		function addButtonEvents(floor){
 			floor.on("up_button_pressed", function(){
 				buttons[floor.floorNum()].up = true;
 				position = new Position(floor.floorNum(), "up");
-				controllers.forEach(function(controller){
+				controllers.forEach(function(controller){				//wet
 					controller.request(position);
 				});
 			});
+
 			floor.on("down_button_pressed", function(){
 				buttons[floor.floorNum()].down = true;
 				position = new Position(floor.floorNum(), "down");
-				controllers.forEach(function(controller){
+				controllers.forEach(function(controller){				//wet
 					controller.request(position);
 				});
 			});
