@@ -6,7 +6,6 @@
 
 		var topFloor = floors[floors.length - 1].floorNum();
 		var loadThreshold = 0.65;
-		var chatty = true;
 		//put some space between the new log and the old stuff
 		console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 		//initialize buttons array
@@ -23,12 +22,12 @@
 		//populate controllers array with elevator controller objects
 		elevators.forEach(function(elevator){
 			var controller = new Controller(elevator, index);
-			if (index == 0){
+			if (index >= 0){
 				controller.chatty = true;
 			}
             controller.say(`Elevator #${controller.num} can hold ${elevator.maxPassengerCount()} people.`);
 			controller.elevator.on("idle", function(){
-				controller.addIdleEvent(controller);
+				controller.onIdle(controller);
 			});
 			//add the controller to the array of controllers and increments the index
 			index = controllers.push(controller);
@@ -40,25 +39,25 @@
 			this.chatty = false;
 			this.num = elevatorNum;
 
-			this.addIdleEvent = function(controller){
+			this.onIdle = function(controller){
 				controller.say("I have nothing to do.");
 				var currentPosition = controller.getPosition();
-				controller.say(`I am on floor ${currentPosition.floor} going ${currentPosition.direction}`);
+				//controller.say(`I am on floor ${currentPosition.floor} going ${currentPosition.direction}`);
 				controller.tryFloor(currentPosition.nextPosition());
 				//controller.go(currentPosition.nextPosition());
 			};
 
 			this.say = function(text){
 				if (this.chatty){
-					console.log(text);
+					console.log(`Elevator ${this.num}: ${text}`);
 				}
 			};
 
 			//go to a floor if it is wanted
 			this.tryFloor = function(position){
-				this.say("I'm trying a floor.");
 				if (this.isCurrentPosition(position)){
-					return; //stops the function to avoid an infinite loop
+					this.say("I don't see anywhere to go.");
+					//return; //stops the function to avoid an infinite loop
 				} else if (this.isRequested(position)){ 			//go to the selected floor if it is wanted
 					this.go(position);
 				} else {
@@ -96,7 +95,7 @@
 			this.go = function(position){
 				var floor = position.floor;
 				var direction = position.direction;
-				this.say(`I am ${Math.round(this.elevator.loadFactor()*100)}% full.`);
+				//this.say(`I am ${Math.round(this.elevator.loadFactor()*100)}% full.`);
 				this.say(`I'm going to floor ${floor}`);
 				this.elevator.goToFloor(floor);
 				if (direction == "up"){
@@ -135,13 +134,23 @@
 			this.indicateUp = function(){
 				this.elevator.goingUpIndicator(true);
 				this.elevator.goingDownIndicator(false);
-				this.say("Let's go up.");
+				//this.say("Let's go up.");
 			};
 
 			this.indicateDown = function(){
 				this.elevator.goingUpIndicator(false);
 				this.elevator.goingDownIndicator(true);
-				this.say("Let's go down.");
+				//this.say("Let's go down.");
+			};
+
+			this.request = function(position){
+				if(this.elevator.destinationQueue.length === 0){
+					// this.tryFloor(position);
+					this.say(`Responding to request from floor ${position.floor}.`);
+					var currentPosition = this.getPosition();
+					//this.say(`I am on floor ${currentPosition.floor} going ${currentPosition.direction}`);
+					this.tryFloor(currentPosition.nextPosition());
+				}
 			};
 		}
 
@@ -193,9 +202,17 @@
 		function addButtonEvents(floor){
 			floor.on("up_button_pressed", function(){
 				buttons[floor.floorNum()].up = true;
+				position = new Position(floor.floorNum(), "up");
+				controllers.forEach(function(controller){
+					controller.request(position);
+				});
 			});
 			floor.on("down_button_pressed", function(){
 				buttons[floor.floorNum()].down = true;
+				position = new Position(floor.floorNum(), "down");
+				controllers.forEach(function(controller){
+					controller.request(position);
+				});
 			});
 		}
 	},

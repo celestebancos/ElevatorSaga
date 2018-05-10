@@ -1,4 +1,6 @@
 Behavior Problems:
+	☐	Now I'm failing challenge 5! :( 3 out of 4 times
+
 	☐	the wait time is too long for challenge 13
 		☐	empty elevators get stuck when going up - they only move when a person gets in, not when a person wants to go up or down from a floor
 		☐	does this happen every time? Does it ever happen to an elevator going down?
@@ -10,12 +12,9 @@ Behavior Problems:
 	☐	I have no way to differentiate between elevators and designate certain ones to behave in a certain way
 
 Do next:
-
-
-	☐	add elevator number
-	☐	put in comments to try to diagnose the stuck elevator problem
-	☐	test this: I could try having the elevator switch to the down position if it tries everything and comes back empty. It won't fix everything but it will at least make it easier to load. Maybe it can just turn on the down light and be at both, in case it's on the bottom floor.
+	☐	have the elevator go to the highest floor button pressed, only stopping for people going up?  And then come down, so it can pick people up and drop them off in one stop?
 Future:
+	☐	test this: I could try having the elevator switch to the down position if it tries everything and comes back empty. It won't fix everything but it will at least make it easier to load. Maybe it can just turn on the down light and be at both, in case it's on the bottom floor.
 	☐	I could make a separate place to keep track of the floors that elevators are going to - and when they get to a floor, they can clear it from both that list and from the buttons list.
 	☐	test if each person pushes the button or just the first person
 	☐	Maybe I want to take the sequencing logic out of the position object, so that I can have multiple different versions (maybe some elevators try going down first, etc.)
@@ -41,6 +40,9 @@ Future:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+	✔	put in comments to try to diagnose the stuck elevator problem @done (18-05-10 15:19) @project(Do next)
+	✔	add elevator number @done (18-05-10 15:19) @project(Do next)
+	✔	I could have the floor buttons request an elevator somehow... @done (18-05-10 15:19) @project(Do next)
 	✔	make a wrapper for the elevator object that stores an elevator number and calls the elevator functions @done (18-05-09 13:58) @project(Do next)
 	✔	So the elevators idle, but then they stop. They don't keep doing the idle thing. @done (18-05-09 13:58) @project(Do next)
 	✔	I can make chatty an elevator attribute, so I can track only one elevator and hope it gets stuck... @done (18-05-09 13:58) @project(Do next)
