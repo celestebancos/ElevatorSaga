@@ -1,22 +1,40 @@
 Behavior Problems:
-	☐	Only beats challenge 5 some of the time
-
 	☐	the wait time is too long for challenge 13
-		☐	empty elevators get stuck when going up - they only move when a person gets in, not when a person wants to go up or down from a floor
-		☐	does this happen every time? Does it ever happen to an elevator going down?
-		☐	it doesn't seem to happen every time.
-		☐	it happens at the beginning; the elevators wait for people to get in before they move
-		☐	maybe elevators get stuck when they somehow have a destination but don't go to it? So they're never idling?
-		☐	maybe most of the elevators should only go up as far as their passengers want, and then they go back down, picking people up along the way...
-	☐	I have no way for elevators to communicate with each other or work together.
-	☐	I have no way to differentiate between elevators and designate certain ones to behave in a certain way
+		☐	wait time is the total time until they get to the floor they want
+		☐	what happens is a bunch of people pile into an elevator and then it takes too long for them all to get off
+		☐	so the sooner they get off, the better
+		☐	and maybe I could try lowering the load threshold.
+		☐	where is the load threshold at anyway? Do the elevators get full?
+		☐	I could give each elevator its own load threshold and see what happens with different settings.
+		☐	But I don't know if that would change things anyway. People keep getting on as long as the elevator is there - well, as long as it has the light on. So I could turn off the indicator when the elevator gets "too full"
+	☐	A person was in the elevator wanting seven and the elevator went up to six but then went down.  Why didn't it go to seven first? Or next?
+	☐ An elevator was passing by a floor with a person on it, but it skipped because a different elevator had already claimed the floor - but that other elevator was already far away.
+	☐	I could create a 'dibs' system where each elevator puts in a bid and the closest one wins.  And elevators bid high or low depending on how close they are and how full they are. I wonder how well that would work?
+
+	☐	The elevator can track how long it's been since a person pushed an elevator button.  It can clear out the count once it gets to that floor.
+		✔	I have to figure out how to use time stamps in JavaScript. @done (18-05-10 22:34)
+		☐	I'm trying to track time, but I don't know how to track in-game time.  Because if it gets sped up or if I pause it, then my timer gets thrown off, and I don't know how to sense those things. So I suppose I could just always run at 1x speed if I want to track time perfectly...
+		☐	So floor button presses shouldn't be too hard to time, but elevator button presses seem trickier, because I don't know the exact time someone gets on.  
+			☐	Oh wait, there is an event for that! :). So I'd have to keep track of the buttons already pressed
+			☐	Record a timestamp when a new one is pressed
+			☐	Clear it all out when the elevator stops at that floor.  
+			☐	That way the elevator will be able to tell at any time which floor is the most urgent.
+
+	☐	Times:
+	1.314 to go to an adjacent floor
+	1.862 to go two floors away
+	1.000 for another person to get on at the last minute (more or less)
+		does it matter how far away the elevator is? should I take walk time into consideration and design my farther away elevators differently?
 
 Do next:
-	☐	have the elevator go to the highest floor button pressed, only stopping for people going up?  And then come down, so it can pick people up and drop them off in one stop?
-		☐	This might make the weight too long for people who are on their way up, if the elevators are all too full to pick them up...
-		☐	I could have them stop if the button inside is pressed, even if they are otherwise too full... I love this game :)
+
+
+
+
+
+
+
 Future:
-	☐	test this: I could try having the elevator switch to the down position if it tries everything and comes back empty. It won't fix everything but it will at least make it easier to load. Maybe it can just turn on the down light and be at both, in case it's on the bottom floor.
 	☐	I could make a separate place to keep track of the floors that elevators are going to - and when they get to a floor, they can clear it from both that list and from the buttons list.
 	☐	test if each person pushes the button or just the first person
 	☐	Maybe I want to take the sequencing logic out of the position object, so that I can have multiple different versions (maybe some elevators try going down first, etc.)
@@ -24,6 +42,7 @@ Future:
 		☐	a stopped elevator has a current floor and a "destination" heading.
 		☐	a moving elevator has an origin floor, a destination floor and a current heading.  But it might also have a "destination" heading if it intends to change direction when it reaches the destination floor.
 	☐	give each elevator it's own load threshold based on capacity
+	☐	Make a way for the elevators to communicate with each other and work together.
 
 
 
@@ -42,6 +61,19 @@ Future:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+	✔	test this: I could try having the elevator switch to the down position if it tries everything and comes back empty. It won't fix everything but it will at least make it easier to load. Maybe it can just turn on the down light and be at both, in case it's on the bottom floor. @done (18-05-10 20:51) @project(Future)
+	✔	have the elevator go to the highest floor button pressed, only stopping for people going up?  And then come down, so it can pick people up and drop them off in one stop? @done (18-05-10 20:47) @project(Do next)
+	✔	This might make the wait too long for people who are on their way up, if the elevators are all too full to pick them up... @done (18-05-10 20:47) @project(Do next)
+	✔	I could have them stop if the button inside is pressed, even if they are otherwise too full... I love this game :) @done (18-05-10 20:47) @project(Do next)
+	✔	maybe most of the elevators should only go up as far as their passengers want, and then they go back down, picking people up along the way... @done (18-05-10 20:46) @project(Behavior Problems)
+	✔	maybe elevators get stuck when they somehow have a destination but don't go to it? So they're never idling? @done (18-05-10 20:46) @project(Behavior Problems)
+	✔	it happens at the beginning; the elevators wait for people to get in before they move @done (18-05-10 20:46) @project(Behavior Problems)
+	✔	it doesn't seem to happen every time. @done (18-05-10 20:46) @project(Behavior Problems)
+	✔	empty elevators get stuck when going up - they only move when a person gets in, not when a person wants to go up or down from a floor @done (18-05-10 20:46) @project(Behavior Problems)
+	✔	does this happen every time? Does it ever happen to an elevator going down? @done (18-05-10 20:46) @project(Behavior Problems)
+	✔	I have no way to differentiate between elevators and designate certain ones to behave in a certain way @done (18-05-10 20:46) @project(Behavior Problems)
+	✔	It had people in it who wanted to go to zero, but it went up instead to pick more people up... which is okay I guess but seems like it could get slow. @done (18-05-10 17:06) @project(Behavior Problems)
+	✔	Doesn't take people up to five sometimes @done (18-05-10 17:06) @project(Behavior Problems)
 	✔	Test old version on challenge 5; maybe I only passed by luck before. @done (18-05-10 15:29) @project(Do next)
 	✔	Now I'm failing challenge 5! :( 3 out of 4 times. I'm pretty close, but I don't know what changed. @done (18-05-10 15:29) @project(Behavior Problems)
 	✔	put in comments to try to diagnose the stuck elevator problem @done (18-05-10 15:19) @project(Do next)

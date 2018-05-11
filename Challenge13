@@ -1,9 +1,10 @@
 {
 	init: function(elevators, floors) {
 		//This version wraps each elevator into a controller object
+		//It doesn't pass all the earlier challenges
 
 		//------------ INITIALIZATION -------------
-
+		var startTime = new Date(Date.now());
 		var topFloor = floors[floors.length - 1].floorNum();
 		var loadThreshold = 0.65;
 		//put some space between the new log and the old stuff
@@ -14,6 +15,13 @@
 			buttons.push({up: false, down: false, elevator: false});
 		});
 
+		//return the current time in milliseconds since the program start time
+		function newTime(){
+			var absoluteTime = new Date(Date.now());
+			var relativeTime = absoluteTime - startTime;
+			return relativeTime;
+		}
+
 		//------------ ELEVATORS -------------
 
 		var controllers = [];
@@ -23,11 +31,17 @@
 		elevators.forEach(function(elevator){
 			var controller = new Controller(elevator, index);
 			if (index >= 0){
-				controller.chatty = true;
+				controller.chatty = false;
 			}
             controller.say(`Elevator #${controller.num} can hold ${elevator.maxPassengerCount()} people.`);
 			controller.elevator.on("idle", function(){
 				controller.onIdle(controller);
+			});
+			controller.elevator.on("floor_button_pressed", function(floorNum){
+				controller.onFloorButtonPressed(controller, floorNum);
+			});
+			controller.elevator.on("stopped_at_floor", function(floorNum){
+				controller.onStopped(controller, floorNum);
 			});
 			//add the controller to the array of controllers and increments the index
 			index = controllers.push(controller);
@@ -38,13 +52,41 @@
 			this.elevator = elevator;
 			this.chatty = false;
 			this.num = elevatorNum;
+			//initialize floorButtons array
+			//the array index will represent the floor number and the value will represent the time pressed.
+			//0 means not pressed.
+			this.floorButtons = []; 
+			var index;
+			for (index = 0; index <= topFloor; index++){
+				this.floorButtons.push(0);
+			}
 
 			this.onIdle = function(controller){
 				controller.say("I have nothing to do.");
 				var currentPosition = controller.getPosition();
+				this.getMostUrgentDropOff();
 				//controller.say(`I am on floor ${currentPosition.floor} going ${currentPosition.direction}`);
 				controller.tryFloor(currentPosition.nextPosition());
 				//controller.go(currentPosition.nextPosition());
+			};
+
+			this.onFloorButtonPressed = function(controller, floorNum){
+				this.floorButtons[floorNum] = newTime();
+			};
+
+			this.onStopped = function(controller, floorNum){
+				if (this.floorButtons[floorNum] > 0){				
+					var timeElapsed = newTime() - this.floorButtons[floorNum];
+					var secondsElapsed = timeElapsed / 1000;
+					//console.log(`${secondsElapsed} to reach Floor ${floorNum}.`);
+					this.floorButtons[floorNum] = 0;
+				} 
+			};
+
+			this.getMostUrgentDropOff = function(){
+				var mostUrgentDropOff = findEarliestIndex(this.floorButtons); 
+				//console.log("Most Urgent DropOff: " + mostUrgentDropOff);
+				return mostUrgentDropOff;
 			};
 
 			this.say = function(text){
@@ -58,7 +100,7 @@
 				if (this.isCurrentPosition(position)){
 					this.say("I don't see anywhere to go.");
 					//return; //stops the function to avoid an infinite loop
-				} else if (this.isRequested(position)){ 			//go to the selected floor if it is wanted
+				} else if (this.isGoodStop(position)){ 			//go to the selected floor if it is a good place to stop
 					this.go(position);
 				} else {
 					this.tryFloor(position.nextPosition());
@@ -66,21 +108,36 @@
 			};
 
 			//check if an elevator or floor button is pressed
-			this.isRequested = function(position){
+			this.isGoodStop = function(position){
 				var floor = position.floor;
 				var direction = position.direction;
-				if (this.elevator.getPressedFloors().includes(floor)){  //change?
-					return true;
-				} else if (this.isFull()){
-					return false;
-				} else if (direction == "up" && buttons[floor].up){
-					return true;
-				} else if (direction == "down" && buttons[floor].down){
-					return true;
-				} else {
-					return false;
+
+				if (direction == "down" || floor === 0){
+					return this.isGoodPickUp(position) || this.isGoodDropOff(position);
+				} else if (direction == "up"){
+					return this.isGoodPickUp(position) || this.isGoodDropOff(position); 
 				}
 			};	
+
+			this.isGoodPickUp = function(position){
+				var floor = position.floor;
+				var direction = position.direction;
+				if (!this.isFull() || this.elevator.getPressedFloors().includes(floor)){	//if the elevator has or will have space
+
+					if (direction == "up" && buttons[floor].up){
+						return true;
+					} else if (direction == "down" && buttons[floor].down){
+						return true;
+					}
+				}
+				return false;
+			};
+
+			this.isGoodDropOff = function(position){
+				if (this.elevator.getPressedFloors().includes(position.floor)){
+					return true;
+				}
+			};
 
 			this.isCurrentPosition = function(position){
 				var elevatorPosition = this.getPosition();
@@ -110,7 +167,7 @@
 			//check if an elevator is full
 			this.isFull = function(){
 				if (this.elevator.loadFactor() > loadThreshold){
-					this.say("I'm too full.");
+					this.say("I'm full.");
 					return true;
 				} else {
 					return false;
@@ -150,6 +207,20 @@
 					this.tryFloor(currentPosition.nextPosition());
 				}
 			};
+		}
+
+		//return the index of the lowest non-zero value in the array
+		function findEarliestIndex(array){
+			var earliestTime = newTime();
+			var i;
+			var indexOfEarliestTime;
+			for (i = 0; i < array.length; i ++){
+				if (array[i] > 0 && array[i] < earliestTime){
+					earliestTime = array[i];
+					indexOfEarliestTime = i;
+				}
+			}
+			return indexOfEarliestTime;
 		}
 
 		//------------ 	POSITIONS -------------
@@ -197,7 +268,7 @@
 		function addButtonEvents(floor){
 			floor.on("up_button_pressed", function(){
 				buttons[floor.floorNum()].up = true;
-				position = new Position(floor.floorNum(), "up");
+				var position = new Position(floor.floorNum(), "up");
 				controllers.forEach(function(controller){				//wet
 					controller.request(position);
 				});
@@ -205,7 +276,7 @@
 
 			floor.on("down_button_pressed", function(){
 				buttons[floor.floorNum()].down = true;
-				position = new Position(floor.floorNum(), "down");
+				var position = new Position(floor.floorNum(), "down");
 				controllers.forEach(function(controller){				//wet
 					controller.request(position);
 				});
