@@ -11,14 +11,15 @@ Behavior Problems:
 	☐ An elevator was passing by a floor with a person on it, but it skipped because a different elevator had already claimed the floor - but that other elevator was already far away.
 	☐	I could create a 'dibs' system where each elevator puts in a bid and the closest one wins.  And elevators bid high or low depending on how close they are and how full they are. I wonder how well that would work?
 
-	☐	The elevator can track how long it's been since a person pushed an elevator button.  It can clear out the count once it gets to that floor.
+	✔	The elevator can track how long it's been since a person pushed an elevator button.  It can clear out the count once it gets to that floor. @done (18-05-11 01:14)
 		✔	I have to figure out how to use time stamps in JavaScript. @done (18-05-10 22:34)
-		☐	I'm trying to track time, but I don't know how to track in-game time.  Because if it gets sped up or if I pause it, then my timer gets thrown off, and I don't know how to sense those things. So I suppose I could just always run at 1x speed if I want to track time perfectly...
-		☐	So floor button presses shouldn't be too hard to time, but elevator button presses seem trickier, because I don't know the exact time someone gets on.  
-			☐	Oh wait, there is an event for that! :). So I'd have to keep track of the buttons already pressed
-			☐	Record a timestamp when a new one is pressed
-			☐	Clear it all out when the elevator stops at that floor.  
-			☐	That way the elevator will be able to tell at any time which floor is the most urgent.
+		✔	I'm trying to track time, but I don't know how to track in-game time.  Because if it gets sped up or if I pause it, then my timer gets thrown off, and I don't know how to sense those things. So I suppose I could just always run at 1x speed if I want to track time perfectly... @done (18-05-11 01:14)
+		☐	So floor button presses shouldn't be too hard to time, 
+		✔	but elevator button presses seem trickier, because I don't know the exact time someone gets on. @done (18-05-11 01:09)  
+			✔	Oh wait, there is an event for that! :). So I'd have to keep track of the buttons already pressed @done (18-05-11 01:09)
+			✔	Record a timestamp when a new one is pressed @done (18-05-11 01:09)
+			✔	Clear it all out when the elevator stops at that floor. @done (18-05-11 01:09)  
+			✔	That way the elevator will be able to tell at any time which floor is the most urgent. @done (18-05-11 01:09)
 
 	☐	Times:
 	1.314 to go to an adjacent floor
