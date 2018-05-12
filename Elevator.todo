@@ -3,31 +3,29 @@ Behavior Problems:
 		☐	wait time is the total time until they get to the floor they want
 		☐	what happens is a bunch of people pile into an elevator and then it takes too long for them all to get off
 		☐	so the sooner they get off, the better
-		☐	and maybe I could try lowering the load threshold.
-		☐	where is the load threshold at anyway? Do the elevators get full?
-		☐	I could give each elevator its own load threshold and see what happens with different settings.
-		☐	But I don't know if that would change things anyway. People keep getting on as long as the elevator is there - well, as long as it has the light on. So I could turn off the indicator when the elevator gets "too full"
 	☐	A person was in the elevator wanting seven and the elevator went up to six but then went down.  Why didn't it go to seven first? Or next?
 	☐ An elevator was passing by a floor with a person on it, but it skipped because a different elevator had already claimed the floor - but that other elevator was already far away.
-	☐	I could create a 'dibs' system where each elevator puts in a bid and the closest one wins.  And elevators bid high or low depending on how close they are and how full they are. I wonder how well that would work?
 
-	✔	The elevator can track how long it's been since a person pushed an elevator button.  It can clear out the count once it gets to that floor. @done (18-05-11 01:14)
-		✔	I have to figure out how to use time stamps in JavaScript. @done (18-05-10 22:34)
-		✔	I'm trying to track time, but I don't know how to track in-game time.  Because if it gets sped up or if I pause it, then my timer gets thrown off, and I don't know how to sense those things. So I suppose I could just always run at 1x speed if I want to track time perfectly... @done (18-05-11 01:14)
-		☐	So floor button presses shouldn't be too hard to time, 
-		✔	but elevator button presses seem trickier, because I don't know the exact time someone gets on. @done (18-05-11 01:09)  
-			✔	Oh wait, there is an event for that! :). So I'd have to keep track of the buttons already pressed @done (18-05-11 01:09)
-			✔	Record a timestamp when a new one is pressed @done (18-05-11 01:09)
-			✔	Clear it all out when the elevator stops at that floor. @done (18-05-11 01:09)  
-			✔	That way the elevator will be able to tell at any time which floor is the most urgent. @done (18-05-11 01:09)
-
-	☐	Times:
-	1.314 to go to an adjacent floor
-	1.862 to go two floors away
-	1.000 for another person to get on at the last minute (more or less)
-		does it matter how far away the elevator is? should I take walk time into consideration and design my farther away elevators differently?
+Times:
+		☐	1.314 to go to an adjacent floor
+		☐	1.862 to go two floors away
+		☐	1.000 for another person to get on at the last minute (more or less)
+		☐	how long to go x floors away?
+		☐	how long at a typical stop?
 
 Do next:
+	☐	I could create a 'dibs' system where each elevator puts in a bid and the closest one wins.  And elevators bid high or low depending on how close they are and how full they are. I wonder how well that would work?
+		☐	when a direction button is pressed, I request bids from each elevator
+		☐	each elevator analyzes its current status and submits a bid
+			☐	if the elevator is already going to the floor, it bids the highest: 100
+			☐	if the elevator has an urgent responsibility and can't stop, it bids low - like 5 or something
+			☐	if the floor is on the way to where the elevator is already going and it has time and space to spare, it will bid medium, depending on how close it is I suppose.
+			☐	I guess there's the question of whether the elevator interrupts the current destination or adds it to the end of the line
+			☐	and do I want to have the queue pile up or keep it simple?
+			☐	but maybe it would be better to cross these bridges when I come to them
+		☐	hmm, or maybe I calculate the time it would take and submit that... but that sounds difficult
+		☐	then I compare the bids and notify the highest bidder
+		☐	the "winner" adds the floor to their plans in whatever way makes sense 
 
 
 
@@ -36,6 +34,13 @@ Do next:
 
 
 Future:
+	☐	Try lowering the load threshold.
+		☐	where is the load threshold at anyway? Do the elevators get full?
+		☐	I could give each elevator its own load threshold and see what happens with different settings.
+		☐	But I don't know if that would change things anyway. People keep getting on as long as the elevator is there
+		☐	Well, as long as it has the light on. So I could turn off the indicator when the elevator gets "too full"
+	☐	Record time of floor button presses
+	☐	Pass that time into whichever elevator responds to the request, so that it can calculate the urgency of the floor button presses more precisely
 	☐	I could make a separate place to keep track of the floors that elevators are going to - and when they get to a floor, they can clear it from both that list and from the buttons list.
 	☐	test if each person pushes the button or just the first person
 	☐	Maybe I want to take the sequencing logic out of the position object, so that I can have multiple different versions (maybe some elevators try going down first, etc.)
@@ -62,6 +67,15 @@ Future:
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+	✔	does it matter how far away the elevator is? should I take walk time into consideration and design my farther away elevators differently? @done (18-05-11 09:36) @project(Times)
+	✔	The elevator can track how long it's been since a person pushed an elevator button.  It can clear out the count once it gets to that floor. @done (18-05-11 01:14) @project(Behavior Problems)
+	✔	I'm trying to track time, but I don't know how to track in-game time.  Because if it gets sped up or if I pause it, then my timer gets thrown off, and I don't know how to sense those things. So I suppose I could just always run at 1x speed if I want to track time perfectly... @done (18-05-11 01:14) @project(Behavior Problems)
+	✔	but elevator button presses seem trickier, because I don't know the exact time someone gets on. @done (18-05-11 01:09) @project(Behavior Problems)  
+	✔	That way the elevator will be able to tell at any time which floor is the most urgent. @done (18-05-11 01:09) @project(Behavior Problems)
+	✔	Record a timestamp when a new one is pressed @done (18-05-11 01:09) @project(Behavior Problems)
+	✔	Oh wait, there is an event for that! :). So I'd have to keep track of the buttons already pressed @done (18-05-11 01:09) @project(Behavior Problems)
+	✔	Clear it all out when the elevator stops at that floor. @done (18-05-11 01:09) @project(Behavior Problems)  
+	✔	I have to figure out how to use time stamps in JavaScript. @done (18-05-10 22:34) @project(Behavior Problems)
 	✔	test this: I could try having the elevator switch to the down position if it tries everything and comes back empty. It won't fix everything but it will at least make it easier to load. Maybe it can just turn on the down light and be at both, in case it's on the bottom floor. @done (18-05-10 20:51) @project(Future)
 	✔	have the elevator go to the highest floor button pressed, only stopping for people going up?  And then come down, so it can pick people up and drop them off in one stop? @done (18-05-10 20:47) @project(Do next)
 	✔	This might make the wait too long for people who are on their way up, if the elevators are all too full to pick them up... @done (18-05-10 20:47) @project(Do next)

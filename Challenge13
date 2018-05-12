@@ -7,33 +7,68 @@
 		var startTime = new Date(Date.now());
 		var topFloor = floors[floors.length - 1].floorNum();
 		var loadThreshold = 0.65;
+		var controllers = [];
+		var controllersIndex = 0;
+		var upButtons = [];
+		var downButtons = [];
+
 		//put some space between the new log and the old stuff
-		console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-		//initialize directionButtons array
-		var directionButtons = [];
+		console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"); 		
+
+		//populate arrays of direction buttons
 		floors.forEach(function(){
-			directionButtons.push({up: 0, down: 0});
+			upButtons.push(false);
+			downButtons.push(false);
 		});
 
-		//return the current time in milliseconds since the program start time
-		function newTime(){
-			var absoluteTime = new Date(Date.now());
-			var relativeTime = absoluteTime - startTime;
-			return relativeTime;
+		//add event handlers and controllers
+		//floors.forEach(addUpButtonEvent);
+		//floors.forEach(addDownButtonEvent);
+		floors.forEach(addFloorEvents);
+		elevators.forEach(addElevatorControllers);
+		controllers.forEach(addElevatorEvents);
+
+
+		//------------ FLOORS -------------
+
+		function addFloorEvents(floor){
+			addButtonEvent(floor, "up");
+			addButtonEvent(floor, "down");
+		}
+
+		function addButtonEvent(floor, direction){
+			var position = new Position(floor.floorNum(), direction);
+			floor.on(direction + "_button_pressed", function(){
+				recordButtonPress(position);
+				requestElevators(position);
+			});
+		}
+
+		function recordButtonPress(position){
+			if (position.direction == "up"){
+				upButtons[position.floor] = true;
+			} else if (position.direction == "down"){
+				downButtons[position.floor] = true;
+			}
+		}
+
+		function requestElevators(position){
+			controllers.forEach(function(controller){
+				controller.request(position);
+			});					
 		}
 
 		//------------ ELEVATORS -------------
 
-		var controllers = [];
-		var index = 0;
-
 		//populate controllers array with elevator controller objects
-		elevators.forEach(function(elevator){
-			var controller = new Controller(elevator, index);
-			if (index >= 0){
-				controller.chatty = false;
-			}
-            controller.say(`Elevator #${controller.num} can hold ${elevator.maxPassengerCount()} people.`);
+
+		function addElevatorControllers(elevator){
+			var controller = new Controller(elevator, controllersIndex);
+			//add the controller to the array of controllers and increments the index
+			controllersIndex = controllers.push(controller);
+		}
+
+		function addElevatorEvents(controller){
 			controller.elevator.on("idle", function(){
 				controller.onIdle(controller);
 			});
@@ -43,9 +78,7 @@
 			controller.elevator.on("stopped_at_floor", function(floorNum){
 				controller.onStopped(controller, floorNum);
 			});
-			//add the controller to the array of controllers and increments the index
-			index = controllers.push(controller);
-		});
+		}
 
 		//create a controller object for an elevator
 		function Controller(elevator, elevatorNum){
@@ -124,9 +157,9 @@
 				var direction = position.direction;
 				if (!this.isFull() || this.elevator.getPressedFloors().includes(floor)){	//if the elevator has or will have space
 
-					if (direction == "up" && directionButtons[floor].up){
+					if (direction == "up" && upButtons[floor]){
 						return true;
-					} else if (direction == "down" && directionButtons[floor].down){
+					} else if (direction == "down" && downButtons[floor]){
 						return true;
 					}
 				}
@@ -157,10 +190,10 @@
 				this.elevator.goToFloor(floor);
 				if (direction == "up"){
 					this.indicateUp(elevator);
-					directionButtons[floor].up = false;
+					upButtons[floor] = false;
 				} else {
 					this.indicateDown(elevator);
-					directionButtons[floor].down = false;
+					downButtons[floor] = false;
 				}
 			};
 	
@@ -223,12 +256,43 @@
 			return indexOfEarliestTime;
 		}
 
-		//------------ 	POSITIONS -------------
+
+		//------------ 	UTILITIES -------------
+
+		//return the current time in milliseconds since the program start time
+		function newTime(){
+			var absoluteTime = new Date(Date.now());
+			var relativeTime = absoluteTime - startTime;
+			return relativeTime;
+		}
 
 		//create a position object
 		function Position(floor, direction){
 			this.floor = floor;
-			this.direction = direction;
+
+			if (direction == "up" || direction == "down"){
+				this.direction = direction;
+			} else if (direction == true){
+				this.direction = "up";
+			} else {
+				this.direction = "down";
+			}
+
+			this.goingUp = function(){
+				if (this.direction == "up"){
+					return true;
+				} else {
+					return false;
+				}
+			};
+
+			this.goingDown = function(){
+				if (this.direction == "down"){
+					return true;
+				} else {
+					return false;
+				}
+			}
 
 			this.nextFloor = function(){
 				// if (floor === 0 || direction == "up"  && floor < topFloor){	 			//next floor up if at the bottom or going up
@@ -256,31 +320,6 @@
 			this.nextPosition = function() {
 				return new Position (this.nextFloor(), this.nextDirection());
 			};
-		}
-
-		//------------ FLOORS -------------
-
-		//add button event handlers to each floor object
-		floors.forEach(function(floor){
-			addButtonEvents(floor);
-		});
-
-		function addButtonEvents(floor){
-			floor.on("up_button_pressed", function(){
-				directionButtons[floor.floorNum()].up = true;
-				var position = new Position(floor.floorNum(), "up");
-				controllers.forEach(function(controller){				//wet
-					controller.request(position);
-				});
-			});
-
-			floor.on("down_button_pressed", function(){
-				directionButtons[floor.floorNum()].down = true;
-				var position = new Position(floor.floorNum(), "down");
-				controllers.forEach(function(controller){				//wet
-					controller.request(position);
-				});
-			});
 		}
 	},
 	update: function(dt, elevators, floors) {
