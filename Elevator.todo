@@ -1,4 +1,6 @@
 Do Next:
+	☐	Ok, so I need to get back into the swing of things. My idea is to start implementing the bid system with a blank slate on the lowest level. I can bring in chunks of code as needed.
+
 	☐	I could create a 'dibs' system where each elevator puts in a bid and the closest one wins.  And elevators bid high or low depending on how close they are and how full they are. I wonder how well that would work?
 		☐	when a direction button is pressed, I request bids from each elevator
 		☐	each elevator analyzes its current status and submits a bid
