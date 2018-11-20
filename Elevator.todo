@@ -1,3 +1,17 @@
+Do Next:
+	☐	I could create a 'dibs' system where each elevator puts in a bid and the closest one wins.  And elevators bid high or low depending on how close they are and how full they are. I wonder how well that would work?
+		☐	when a direction button is pressed, I request bids from each elevator
+		☐	each elevator analyzes its current status and submits a bid
+			☐	if the elevator is already going to the floor, it bids the highest: 100
+			☐	if the elevator has an urgent responsibility and can't stop, it bids low - like 5 or something
+			☐	if the floor is on the way to where the elevator is already going and it has time and space to spare, it will bid medium, depending on how close it is I suppose.
+			☐	I guess there's the question of whether the elevator interrupts the current destination or adds it to the end of the line
+			☐	and do I want to have the queue pile up or keep it simple?
+			☐	but maybe it would be better to cross these bridges when I come to them
+		☐	hmm, or maybe I calculate the time it would take and submit that... but that sounds difficult
+		☐	then I compare the bids and notify the highest bidder
+		☐	the "winner" adds the floor to their plans in whatever way makes sense 
+
 Behavior Problems:
 	☐	the wait time is too long for challenge 13
 		☐	wait time is the total time until they get to the floor they want
@@ -13,20 +27,19 @@ Times:
 		☐	how long to go x floors away?
 		☐	how long at a typical stop?
 
-Do next:
-	☐	I could create a 'dibs' system where each elevator puts in a bid and the closest one wins.  And elevators bid high or low depending on how close they are and how full they are. I wonder how well that would work?
-		☐	when a direction button is pressed, I request bids from each elevator
-		☐	each elevator analyzes its current status and submits a bid
-			☐	if the elevator is already going to the floor, it bids the highest: 100
-			☐	if the elevator has an urgent responsibility and can't stop, it bids low - like 5 or something
-			☐	if the floor is on the way to where the elevator is already going and it has time and space to spare, it will bid medium, depending on how close it is I suppose.
-			☐	I guess there's the question of whether the elevator interrupts the current destination or adds it to the end of the line
-			☐	and do I want to have the queue pile up or keep it simple?
-			☐	but maybe it would be better to cross these bridges when I come to them
-		☐	hmm, or maybe I calculate the time it would take and submit that... but that sounds difficult
-		☐	then I compare the bids and notify the highest bidder
-		☐	the "winner" adds the floor to their plans in whatever way makes sense 
-
+Blog Ideas:
+	☐	Callback functions
+	☐	Making code dry
+	☐	Readability over brevity
+	☐	Recursion
+	☐	The idle function not behaving as expected (dig into the source code to try and diagnose it)
+	☐	Github
+	☐	Using the console to trouble-shoot
+	☐	Using jshint
+	☐	Infinite loops
+	☐	Getting basic code set up
+	☐	Managing complex/long code
+	☐	
 
 
 
